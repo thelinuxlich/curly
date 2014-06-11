@@ -99,8 +99,10 @@ module Curly
 
       <<-RUBY
         presenters << presenter
+        i = 0
         presenter.#{reference}.each do |item|
-          presenter = #{item_presenter_class}.new(self, options.merge(:#{as} => item))
+          presenter = #{item_presenter_class}.new(self, options.merge(:#{as} => item, :#{as + "_counter"} => i))
+          i += 1
       RUBY
     end
 
@@ -133,7 +135,7 @@ module Curly
 
     def compile_collection_block_end(reference)
       @presenter_classes.pop
-      validate_block_end(reference)     
+      validate_block_end(reference)
 
       <<-RUBY
         end

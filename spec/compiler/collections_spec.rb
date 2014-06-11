@@ -20,6 +20,7 @@ describe Curly::Compiler do
   let(:inner_presenter_class) do
     Class.new(Curly::Presenter) do
       presents :item
+      presents :item_counter
       presents :list, default: nil
 
       def name
@@ -32,6 +33,10 @@ describe Curly::Compiler do
 
       def parts
         @item.parts
+      end
+
+      def item_counter
+        @item_counter
       end
     end
   end
@@ -61,8 +66,8 @@ describe Curly::Compiler do
 
     list.stub(:items) { [item1, item2] }
 
-    template = "<ul>{{#items}}<li>{{name}}</li>{{/items}}</ul>"
-    evaluate(template).should == "<ul><li>foo</li><li>bar</li></ul>"
+    template = "<ul>{{#items}}<li>{{item_counter}}</li><li>{{name}}</li>{{/items}}</ul>"
+    evaluate(template).should == "<ul><li>0</li><li>foo</li><li>1</li><li>bar</li></ul>"
   end
 
   it "restores the previous scope after exiting the collection block" do
